@@ -1,9 +1,13 @@
+import dotenv from "dotenv";
+if(process.env.NODE_ENV !== "production"){
+  dotenv.config();
+}
 import express from "express";
 import mongoose from "mongoose";
 import bodyParser from "body-parser";
 import cors from "cors";
 import helmet from "helmet";
-import dotenv from "dotenv";
+
 import morgan from "morgan";
 import multer from "multer";
 import path from "path";
@@ -19,7 +23,8 @@ import { createPost } from "./controllers/posts.js";
 // CONFIGURATIONS
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-dotenv.config();
+
+
 const app = express();
 app.use(express.json());
 app.use(helmet());
@@ -31,18 +36,22 @@ app.use(cors());
 app.use("/assets", express.static(path.join(__dirname, "public/assets")));
 
 // FILE STORAGE
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "public/assets");
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.originalname);
-  },
-});
-const upload = multer({ storage });
+// const storage = multer.diskStorage({
+//   destination: function (req, file, cb) {
+//     cb(null, "public/assets");
+//   },
+//   filename: function (req, file, cb) {
+//     cb(null, file.originalname);
+//   },
+// });
+// const upload = multer({ storage });
+
+// FILE STORAGE IN CLOUDINARY
+import { storage } from "./cloudinary/index.js"
+const upload = multer({storage})
 
 app.post("/auth/register", upload.single("picture"), register);
-app.post("/posts", verifyToken, upload.single("picture"), createPost)
+app.post("/posts", verifyToken, upload.array("picture"), createPost)
 app.use("/auth", authRoutes)
 app.use("/users", usersRoutes)
 app.use("/posts", postRoutes)
@@ -59,3 +68,4 @@ mongoose
   .catch((error) => {
     console.log(`${error} did not connect`);
   });
+

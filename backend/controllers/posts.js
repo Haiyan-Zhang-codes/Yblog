@@ -1,10 +1,14 @@
 import User from "../models/User.js";
 import Post from "../models/Post.js";
+import {v2 as cloudinary} from "cloudinary";
 
 export const createPost = async (req, res) => {
   try {
-    const { userId, description, picturePath } = req.body;
+    
+    const { userId, description } = req.body;
     const user = await User.findById(userId);
+    const picturePaths = req.files.map(f=>f.path)
+     
     const newPost = new Post({
       userId,
       firstName: user.firstName,
@@ -12,7 +16,7 @@ export const createPost = async (req, res) => {
       location: user.location,
       description,
       userPicturePath: user.picturePath,
-      picturePath,
+      picturePaths,
       likes: {},
       comments: [],
     });
@@ -56,8 +60,12 @@ export const likePost = async (req, res) => {
       post.likes.set(userId, true);
     }
 
-    const updatedPost = await Post.findByIdAndUpdate(id, {likes: post.likes}, { new: true})
-    res.status(200).json(updatedPost)
+    const updatedPost = await Post.findByIdAndUpdate(
+      id,
+      { likes: post.likes },
+      { new: true }
+    );
+    res.status(200).json(updatedPost);
   } catch (err) {
     res.status(404).json({ message: err.message });
   }

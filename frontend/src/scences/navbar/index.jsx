@@ -57,7 +57,7 @@ const Navbar = () => {
             },
           }}
         >
-          Xblog
+          Yblog
         </Typography>
         {isNonMobileScreens && (
           <FlexBetween
