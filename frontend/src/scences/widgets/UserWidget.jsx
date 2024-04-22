@@ -32,7 +32,7 @@ const UserWidget = ({ userId, picturePath }) => {
 
   useEffect(() => {
     getUser();
-  }, []);
+  }, []);// eslint-disable-next-line
 
   if (!user) {
     return null;
