@@ -2,8 +2,14 @@ import React from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { Box, useMediaQuery } from "@mui/material";
+
+
+
+
 
 const PostImages = ({ picturePaths }) => {
+  const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
   const settings = {
     dots: true,
     infinite: true,
@@ -14,19 +20,30 @@ const PostImages = ({ picturePaths }) => {
     autoplaySpeed: 3000,
   };
   return (
-    <Slider {...settings}>
-      {picturePaths.map((pictruePath, index) => (
-        <div key={index}>
-          <img
-            src={pictruePath}
-            alt={`Slide ${index + 1}`}
-            width="100%"
-            height="auto"
-            style={{ borderRadius: "0.75rem", marginTop: "0.75rem" }}
-          />
-        </div>
-      ))}
-    </Slider>
+    
+    <Box  width={isNonMobileScreens? "32rem": "100%"}>
+      <Slider {...settings}>
+        {picturePaths && 
+          picturePaths.map((pictruePath, index) => (
+            <div
+              key={index}
+              style={{ display: "flex", justifyContent: "center" }}
+            >
+              <img
+                src={pictruePath}
+                alt={`Slide ${index + 1}`}
+                style={{
+                  maxWidth:  "100%",
+                  maxHeight: "auto",
+                  borderRadius: "0.75rem",
+                  marginTop: "0.75rem",
+                  objectFit: "contain",
+                }}
+              />
+            </div>
+          ))}
+      </Slider>
+    </Box>
   );
 };
 

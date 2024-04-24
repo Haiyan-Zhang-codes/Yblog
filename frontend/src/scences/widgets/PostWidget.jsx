@@ -1,9 +1,11 @@
 import {
   ChatBubbleOutlineOutlined,
-  FavoriteBorderOutlined,
-  FavoriteOutlined,
+  // FavoriteBorderOutlined,
+  // FavoriteOutlined,
   ShareOutlined,
 } from "@mui/icons-material";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { Box, Divider, IconButton, Typography, useTheme } from "@mui/material";
 import FlexBetween from "components/FlexBetween";
 import Friend from "components/Friend";
@@ -29,7 +31,9 @@ const PostWidget = ({
 
   const [isComments, setIsComments] = useState(false);
   const loggedInUserId = useSelector((state) => state.user._id);
+
   const isLiked = Boolean(likes[loggedInUserId]);
+
   const likeCount = Object.keys(likes).length;
 
   const { palette } = useTheme();
@@ -61,15 +65,17 @@ const PostWidget = ({
       <Typography color={main} sx={{ mt: "1rem" }}>
         {description}
       </Typography>
-      {picturePaths ? <PostImages picturePaths={picturePaths} /> : undefined}
+
+      <PostImages picturePaths={picturePaths} />
+
       <FlexBetween mt="0.25rem">
         <FlexBetween gap="1rem">
           <FlexBetween gap="0.3rem">
             <IconButton onClick={patchLike}>
               {isLiked ? (
-                <FavoriteOutlined sx={{ color: primary }} />
+                <FavoriteIcon sx={{ color: primary }} />
               ) : (
-                <FavoriteBorderOutlined />
+                <FavoriteBorderIcon />
               )}
             </IconButton>
             <Typography>{likeCount}</Typography>
